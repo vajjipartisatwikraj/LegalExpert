@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Nekst-Regular';
+  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nekst-Light';
+  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nekst-Medium';
+  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nekst-SemiBold';
+  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nekst-Bold';
+  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nekst-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}

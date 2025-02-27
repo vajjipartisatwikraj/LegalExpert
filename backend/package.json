@@ -1,0 +1,27 @@
+{
+  "name": "legalexpert-ai-backend",
+  "version": "1.0.0",
+  "description": "Backend for LegalExpert.AI - MERN stack legal assistance platform",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^1.5.0",
+    "axios": "^1.8.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "pdfkit": "^0.14.0",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

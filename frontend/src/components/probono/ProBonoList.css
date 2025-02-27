@@ -1,0 +1,38 @@
+.MuiCard-root {
+    background-color: black !important;
+    color: white !important;
+    border: 0.1px solid rgb(31, 31, 31) !important;
+}
+
+.MuiTypography-root {
+    color: white !important;
+}
+
+.MuiChip-root {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.MuiRating-root {
+    color: #BB0202 !important;
+}
+
+.MuiButton-root {
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.23) !important;
+}
+
+.MuiButton-root:hover {
+    border-color: white !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.MuiDialog-paper {
+    background-color: black !important;
+    color: white !important;
+    border: 0.1px solid rgb(31, 31, 31) !important;
+}
+
+.MuiDivider-root {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}

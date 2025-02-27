@@ -1,0 +1,29 @@
+{
+  "name": "legalexpert-ai",
+  "version": "1.0.0",
+  "description": "AI-powered legal assistance platform using MERN stack and MistralAI",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "cd backend && npm install",
+    "install-client": "cd frontend && npm install",
+    "install": "npm run install-server && npm run install-client",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "legal",
+    "ai",
+    "mern",
+    "mistralai",
+    "react",
+    "node",
+    "mongodb",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

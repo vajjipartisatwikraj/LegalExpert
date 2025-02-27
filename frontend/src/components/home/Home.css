@@ -1,0 +1,25 @@
+.css-wogcqm{
+    background-color: black !important;
+}
+
+.heading1{
+    font-family: Nekst-semibold !important;
+    color: white;
+    font-size: 50px !important;
+    background: linear-gradient(90deg, #BB0202 0%, #DC4C31 48.6%, #FF9A63 100%);
+    background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.heading6{
+    font-family: Nekst-light;
+    font-size: 30px;
+    background: white;
+    -webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}   
+
+.intial-btns{
+    border: 1px solid wheat;
+}
