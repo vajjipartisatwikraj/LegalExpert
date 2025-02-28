@@ -42,6 +42,22 @@
     font-family: 'Nekst-Regular' !important;
 }
 
+.MuiTypography-root {
+    color: white !important;
+}
+
+.MuiTypography-h6 {
+    font-size: 1.2rem !important;
+}
+
+.MuiTypography-body1 {
+    font-size: 1rem !important;
+}
+
+.MuiChip-label {
+    font-size: 0.9rem !important;
+}
+
 .MuiMenuItem-root:hover {
     background-color: rgba(0, 0, 0, 0.08) !important;
 }
@@ -58,4 +74,20 @@
 
 .css-ripxmb-MuiButtonBase-root-MuiMenuItem-root:hover{
     color: white!important;
+}
+
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root{
+    color: white !important;
+}
+
+.MuiTab-textColorPrimary {
+    color: white !important;
+}
+
+.MuiTab-textColorPrimary.Mui-selected {
+    color: #BB0202 !important;
+}
+
+.MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root{
+    font-size: 30px !important;
 }

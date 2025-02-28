@@ -10,49 +10,51 @@ import {
   ListItemText,
   Divider,
   Chip,
-  LinearProgress
+
 } from '@mui/material';
 
 const AnalysisResult = ({ analysis }) => {
-  const renderRiskGauge = (value, label) => (
-    <Box sx={{ mb: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-        <Typography variant="subtitle2">{label}</Typography>
-        <Typography variant="subtitle2">{value}%</Typography>
+  const renderRiskMetric = (value, label) => (
+    <Box sx={{ mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 500, color: '#fff' }}>{label}</Typography>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600, 
+            color: value > 66 ? '#f44336' : value > 33 ? '#ff9800' : '#4caf50'
+          }}
+        >
+          {value}%
+        </Typography>
       </Box>
-      <LinearProgress
-        variant="determinate"
-        value={value}
-        sx={{
-          height: 10,
-          borderRadius: 5,
-          backgroundColor: '#e0e0e0',
-          '& .MuiLinearProgress-bar': {
-            borderRadius: 5,
-            backgroundColor: value > 66 ? '#f44336' : value > 33 ? '#ff9800' : '#4caf50'
-          }
-        }}
-      />
     </Box>
   );
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={4}>
       <Grid item xs={12} md={6}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
+        <Card sx={{ 
+          height: '100%',
+          backgroundColor: '#1a1a1a',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          borderRadius: 3,
+          transition: 'transform 0.3s ease-in-out',
+          '&:hover': { transform: 'translateY(-5px)' }
+        }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 600, color: '#fff' }}>
               Risk Analysis
             </Typography>
-            {renderRiskGauge(analysis.riskLevel, 'Risk Level')}
-            {renderRiskGauge(analysis.resolutionProbability, 'Resolution Probability')}
-            {renderRiskGauge(analysis.complexity, 'Case Complexity')}
+            {renderRiskMetric(analysis.riskLevel, 'Risk Level')}
+            {renderRiskMetric(analysis.resolutionProbability, 'Resolution Probability')}
+            {renderRiskMetric(analysis.complexity, 'Case Complexity')}
             
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="subtitle1" gutterBottom>
+            <Box sx={{ mt: 4, p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 2 }}>
+              <Typography variant="h6" gutterBottom sx={{ color: '#fff' }}>
                 Estimated Timeline
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                 {analysis.timeEstimate}
               </Typography>
             </Box>
@@ -61,32 +63,53 @@ const AnalysisResult = ({ analysis }) => {
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
+        <Card sx={{ 
+          height: '100%',
+          backgroundColor: '#1a1a1a',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          borderRadius: 3,
+          transition: 'transform 0.3s ease-in-out',
+          '&:hover': { transform: 'translateY(-5px)' }
+        }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 600, color: '#fff' }}>
               Recommended Pro Bono Lawyers
             </Typography>
-            <List>
+            <List sx={{ '& .MuiListItem-root': { py: 2 } }}>
               {analysis.suggestedLawyers.map((lawyer, index) => (
                 <React.Fragment key={lawyer._id}>
-                  <ListItem>
+                  <ListItem sx={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: 2,
+                    mb: 2
+                  }}>
                     <ListItemText
-                      primary={lawyer.name}
+                      primary={
+                        <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>
+                          {lawyer.name}
+                        </Typography>
+                      }
                       secondary={
                         <Box sx={{ mt: 1 }}>
                           {lawyer.areasOfPractice.map((area, i) => (
                             <Chip
                               key={i}
                               label={area}
-                              size="small"
-                              sx={{ mr: 0.5, mb: 0.5 }}
+                              size="medium"
+                              sx={{ 
+                                mr: 1,
+                                mb: 1,
+                                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                color: '#4caf50',
+                                '&:hover': { backgroundColor: 'rgba(76, 175, 80, 0.2)' }
+                              }}
                             />
                           ))}
                         </Box>
                       }
                     />
                   </ListItem>
-                  {index < analysis.suggestedLawyers.length - 1 && <Divider />}
+                  {index < analysis.suggestedLawyers.length - 1 && <Divider sx={{ my: 2 }} />}
                 </React.Fragment>
               ))}
             </List>
@@ -95,21 +118,36 @@ const AnalysisResult = ({ analysis }) => {
       </Grid>
 
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
+        <Card sx={{ 
+          backgroundColor: '#1a1a1a',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          borderRadius: 3,
+          transition: 'transform 0.3s ease-in-out',
+          '&:hover': { transform: 'translateY(-5px)' }
+        }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 600, color: '#fff' }}>
               Recommended Steps
             </Typography>
             <List>
               {analysis.steps.map((step, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: 2,
+                  mb: 2,
+                  p: 3
+                }}>
                   <ListItemText
                     primary={
-                      <Typography variant="subtitle1">
+                      <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>
                         {index + 1}. {step.description}
                       </Typography>
                     }
-                    secondary={`Estimated time: ${step.estimatedTime}`}
+                    secondary={
+                      <Typography variant="subtitle1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                        Estimated time: {step.estimatedTime}
+                      </Typography>
+                    }
                   />
                 </ListItem>
               ))}
@@ -119,34 +157,51 @@ const AnalysisResult = ({ analysis }) => {
       </Grid>
 
       <Grid item xs={12}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
+        <Card sx={{ 
+          backgroundColor: '#1a1a1a',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          borderRadius: 3,
+          transition: 'transform 0.3s ease-in-out',
+          '&:hover': { transform: 'translateY(-5px)' }
+        }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 600, color: '#fff' }}>
               Relevant Legal Articles
             </Typography>
             <List>
               {analysis.relevantArticles.map((article, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} sx={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: 2,
+                  mb: 2,
+                  p: 3
+                }}>
                   <ListItemText
                     primary={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="subtitle1">
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                        <Typography variant="h6" sx={{ color: '#fff' }}>
                           {article.title}
                         </Typography>
                         <Chip
                           label={`${article.relevance}% Relevant`}
-                          size="small"
-                          color={article.relevance > 75 ? 'success' : 'default'}
+                          size="medium"
+                          sx={{
+                            backgroundColor: article.relevance > 75 ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                            color: article.relevance > 75 ? '#4caf50' : '#fff',
+                            fontWeight: 500
+                          }}
                         />
                       </Box>
                     }
                     secondary={
-                      <>
-                        <Typography component="span" variant="body2" color="text.primary">
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ color: '#bb86fc', mb: 1 }}>
                           Article {article.articleNumber}
                         </Typography>
-                        {` — ${article.description}`}
-                      </>
+                        <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                          {article.description}
+                        </Typography>
+                      </Box>
                     }
                   />
                 </ListItem>

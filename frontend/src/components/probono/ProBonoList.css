@@ -36,3 +36,7 @@
 .MuiDivider-root {
     border-color: rgba(255, 255, 255, 0.12) !important;
 }
+
+.css-fc27wb-MuiButtonBase-root-MuiMenuItem-root{
+    color: white!important;
+}

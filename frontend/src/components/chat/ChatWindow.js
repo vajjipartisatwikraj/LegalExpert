@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Paper, TextField, Button, Typography, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
 import { Send as SendIcon } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import './chat.css';
+
 
 const ChatWindow = () => {
   const { chatId } = useParams();
@@ -34,6 +36,18 @@ const ChatWindow = () => {
     }
   };
 
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !chatId) return;
@@ -52,22 +66,22 @@ const ChatWindow = () => {
       const data = await response.json();
       if (data.status === 'success') {
         setMessages(prev => [...prev, 
-          { role: 'user', content: newMessage },
-          { role: 'assistant', content: data.data.message }
+          { role: 'user', content: newMessage, timestamp: new Date().toISOString() },
+          { role: 'assistant', content: data.data.message, timestamp: new Date().toISOString() }
         ]);
         setNewMessage('');
       } else {
         console.error('Error from server:', data.message);
         setMessages(prev => [...prev,
-          { role: 'user', content: newMessage },
-          { role: 'system', content: 'Sorry, there was an error processing your message. Please try again.' }
+          { role: 'user', content: newMessage, timestamp: new Date().toISOString() },
+          { role: 'system', content: 'Sorry, there was an error processing your message. Please try again.', timestamp: new Date().toISOString() }
         ]);
       }
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages(prev => [...prev,
-        { role: 'user', content: newMessage },
-        { role: 'system', content: 'Sorry, there was an error sending your message. Please check your connection and try again.' }
+        { role: 'user', content: newMessage, timestamp: new Date().toISOString() },
+        { role: 'system', content: 'Sorry, there was an error sending your message. Please check your connection and try again.', timestamp: new Date().toISOString() }
       ]);
     } finally {
       setLoading(false);
@@ -107,18 +121,25 @@ const ChatWindow = () => {
                 color: 'white',
                 maxWidth: '80%',
                 borderRadius: '12px',
-                position: 'relative'
+                position: 'relative',
+                display:'flex',
+                
               }}>
                 <ListItemText
                   primary={
-                    <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 0.5 }}>
+                    <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
                       {message.role === 'user' ? 'You' : 'AI Assistant'}
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="body1" sx={{ color: 'white' }}>
-                      {message.content}
-                    </Typography>
+                    <Box>
+                      <Typography variant="body1" sx={{ color: 'white', mb: 2 }}>
+                        {message.content}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                        {formatTimestamp(message.timestamp)}
+                      </Typography>
+                    </Box>
                   }
                 />
               </Paper>
@@ -127,8 +148,17 @@ const ChatWindow = () => {
         </List>
       </Paper>
 
-      <Paper elevation={3} sx={{ p: 2, backgroundColor: '#000000', borderTop: '1px solid #1E1E1E' }}>
-        <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: 8 }}>
+      <Paper elevation={3} sx={{ 
+        p: 2, 
+        backgroundColor: '#000000', 
+        borderTop: '1px solid #1E1E1E',
+        position: 'fixed',
+        bottom: 0,
+        left: '250px',
+        right: 0,
+        zIndex: 1000
+      }}>
+        <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: 8, maxWidth: '1200px', margin: '0 auto' }}>
           <TextField
             fullWidth
             variant="outlined"

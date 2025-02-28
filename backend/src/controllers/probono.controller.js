@@ -7,7 +7,8 @@ export const getProBonoLawyers = async (req, res) => {
     const probonoLawyers = await ProBono.find({ isActive: true })
       .populate({
         path: 'lawyer',
-        select: 'name email lawyerProfile'
+        select: 'name email lawyerProfile',
+        model: 'User'
       })
       .sort('-rating');
 
@@ -28,7 +29,11 @@ export const getProBonoLawyerById = async (req, res) => {
   try {
     const { id } = req.params;
     const probonoLawyer = await ProBono.findById(id)
-      .populate('lawyer', 'name email');
+      .populate({
+        path: 'lawyer',
+        select: 'name email lawyerProfile',
+        model: 'User'
+      });
 
     if (!probonoLawyer) {
       return res.status(404).json({
@@ -223,7 +228,11 @@ export const searchProBonoLawyers = async (req, res) => {
     }
 
     const probonoLawyers = await ProBono.find({ ...filters, isActive: true })
-      .populate('lawyer', 'name email')
+      .populate({
+        path: 'lawyer',
+        select: 'name email lawyerProfile',
+        model: 'User'
+      })
       .sort('-rating');
 
     res.status(200).json({

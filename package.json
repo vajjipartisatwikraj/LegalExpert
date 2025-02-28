@@ -8,7 +8,7 @@
     "install-client": "cd frontend && npm install",
     "install": "npm run install-server && npm run install-client",
     "server": "cd backend && npm run dev",
-    "client": "cd frontend && npm run dev",
+    "client": "cd frontend && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [

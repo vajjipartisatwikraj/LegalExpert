@@ -4,5 +4,6 @@
 
 .css-1lwhjos-MuiPaper-root-MuiDrawer-paper{
     border: none;
+    background-color: transparent !important;
     border-right: 0.1px solid rgb(31, 31, 31) !important;
 }

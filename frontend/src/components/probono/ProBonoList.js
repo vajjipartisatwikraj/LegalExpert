@@ -32,6 +32,7 @@ import {
   Email as EmailIcon,
   LocationOn as LocationIcon
 } from '@mui/icons-material';
+import LawyerCard from './LawyerCard';
 
 const ProBonoList = () => {
   const [lawyers, setLawyers] = useState([]);
@@ -64,7 +65,6 @@ const ProBonoList = () => {
         }
       });
       const data = await response.json();
-      console.log(data);
       
       if (data.status === 'success') {
         setLawyers(data.data.probonoLawyers);
@@ -106,8 +106,9 @@ const ProBonoList = () => {
   const filteredLawyers = lawyers.filter(lawyer => {
     if (!lawyer) return false;
     
+    const lawyerName = lawyer.name || lawyer.lawyer?.name || '';
     const matchesSearch = 
-      (lawyer.lawyer?.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lawyerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (lawyer.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       (lawyer.areasOfPractice || []).some(area =>
         area.toLowerCase().includes(searchQuery.toLowerCase())
@@ -168,14 +169,17 @@ const ProBonoList = () => {
                 onChange={(e) => setSelectedDomain(e.target.value)}
                 label="Legal Domain"
                 sx={{ 
-                  color: 'white',
+                  color: 'white !important',
                   '& .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
                   '& .MuiSvgIcon-root': { color: 'white' }
                 }}
               >
                 <MenuItem value="all">All Domains</MenuItem>
                 {legalDomains.map((domain) => (
-                  <MenuItem key={domain} value={domain}>
+                  <MenuItem key={domain} value={domain} sx={{ 
+                    color: 'white',
+                    backgroundColor:'black',
+                  }}>
                     {domain}
                   </MenuItem>
                 ))}
@@ -188,55 +192,14 @@ const ProBonoList = () => {
       <Grid container spacing={3}>
         {filteredLawyers.map((lawyer) => (
           <Grid item xs={12} md={6} lg={4} key={lawyer._id}>
-            <Card sx={{ height: '100%', display: 'flex', height:'350px', flexDirection: 'column', padding:'20px' }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>
-                  {lawyer.lawyer?.name || 'Unknown Lawyer'}
-                </Typography>
-                <Box display="flex" alignItems="center" mb={1}>
-                  <Rating
-                    value={lawyer.rating}
-                    precision={0.5}
-                    onChange={(_, value) => handleRateLawyer(lawyer._id, value)}
-                  />
-                  <Typography variant="body2" color="text.secondary" ml={1}>
-                    ({lawyer.totalRatings} ratings)
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary" paragraph>
-                  Experience: {lawyer.experience} years
-                </Typography>
-                <Box mb={1}>
-                  {lawyer.areasOfPractice.map((area) => (
-                    <Chip
-                      key={area}
-                      label={area}
-                      size="small"
-                      sx={{ mr: 0.5, mb: 0.5 }}
-                    />
-                  ))}
-                </Box>
-                <Typography variant="body2" paragraph sx={{fontFamily:'Nekst-Light', fontSize:'13px'}}>
-                  {lawyer.description.split(' ').slice(0, 35).join(' ')}
-                  {lawyer.description.split(' ').length > 35 ? '...' : ''}
-                </Typography>
-                <Typography variant="body2" color="primary">
-                  Starting from ${lawyer.startingCharge}/hour
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={() => {
-                    setSelectedLawyer(lawyer);
-                    setDialogOpen(true);
-                  }}
-                >
-                  View Details
-                </Button>
-              </CardActions>
-            </Card>
+            <LawyerCard
+              lawyer={lawyer}
+              onRate={handleRateLawyer}
+              onViewDetails={() => {
+                setSelectedLawyer(lawyer);
+                setDialogOpen(true);
+              }}
+            />
           </Grid>
         ))}
       </Grid>
@@ -249,7 +212,14 @@ const ProBonoList = () => {
       >
         {selectedLawyer && (
           <>
-            <DialogTitle>{selectedLawyer.lawyer?.name || 'Unknown Lawyer'}</DialogTitle>
+            <DialogTitle>
+              {selectedLawyer.name || selectedLawyer.lawyer?.name || 'Unknown Lawyer'}
+              {selectedLawyer.lawyer?.lawyerProfile?.domains?.length > 0 && (
+                <Typography variant="subtitle1" color="textSecondary">
+                  {selectedLawyer.lawyer.lawyerProfile.domains[0]}
+                </Typography>
+              )}
+            </DialogTitle>
             <DialogContent>
               <List>
                 <ListItem>

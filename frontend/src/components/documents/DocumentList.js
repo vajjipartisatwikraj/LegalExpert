@@ -27,6 +27,9 @@ const DocumentList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const [viewMode, setViewMode] = useState('grid');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchDocuments();
@@ -149,15 +152,19 @@ const DocumentList = () => {
 
   return (
     <Box width={'100%'}>
-      <Box  display="flex" justifyContent="space-between" alignItems="center" mb={3} width={'100%'}>
-        <Typography variant="h4" component="h1" sx={{color:'white'}}>
-          Legal Documents
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, width: '100%' }}>
+        <Typography variant="h4" component="h1" sx={{ color: 'white', fontFamily: 'Nekst-SemiBold' }}>
+          My Documents
         </Typography>
         <Button
           variant="contained"
-          color="primary"
           startIcon={<DocumentIcon />}
           onClick={() => setDialogOpen(true)}
+          sx={{
+            bgcolor: '#BB0202',
+            '&:hover': { bgcolor: '#8B0000' },
+            fontFamily: 'Nekst-Medium'
+          }}
         >
           Create New Document
         </Button>
@@ -172,7 +179,18 @@ const DocumentList = () => {
       ) : (
         <List>
           {documents.map((document) => (
-            <Paper key={document._id} sx={{ mb: 2, backgroundColor: '#000000', '&:hover': { backgroundColor: '#e9ecef', transform: 'translateY(-2px)', transition: 'all 0.3s ease-in-out' } }}>
+            <Paper key={document._id} sx={{ 
+                mb: 2, 
+                backgroundColor: '#000000',
+                border: '0.1px solid rgb(31, 31, 31) !important', 
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': { 
+                  backgroundColor: '#000000', 
+                  transform: 'translateY(-4px)', 
+                  boxShadow: '0 4px 20px rgba(187, 2, 2, 0.1)',
+                  transition: 'all 0.3s ease-in-out' 
+                } 
+              }}>
               <ListItem
                 secondaryAction={
                   <Box>
@@ -180,6 +198,10 @@ const DocumentList = () => {
                       edge="end"
                       aria-label="download"
                       onClick={() => handleDownloadPDF(document._id)}
+                      sx={{
+                        color: 'white',
+                        paddingRight:'30px'
+                      }}
                     >
                       <DownloadIcon />
                     </IconButton>
@@ -190,6 +212,9 @@ const DocumentList = () => {
                         setSelectedDocument(document);
                         setEditDialogOpen(true);
                       }}
+                      sx={{
+                        color: 'white',
+                      }}
                     >
                       <EditIcon />
                     </IconButton>
@@ -197,6 +222,7 @@ const DocumentList = () => {
                 }
               >
                 <ListItemText
+                  sx={{fontSize:'30px'}}
                   primary={document.title}
                   secondary={
                     <React.Fragment>
@@ -205,6 +231,9 @@ const DocumentList = () => {
                           component="span"
                           variant="body2"
                           color="textPrimary"
+                          sx={{
+                            fontSize:'15px'
+                          }}
                         >
                           {document.description}
                         </Typography>

@@ -17,11 +17,14 @@ export const createAnalysis = async (req, res) => {
     // Generate AI-powered analysis metrics
     const analysis = await generateAnalysisMetrics(problemDescription, areaOfLaw);
 
-    // Find suitable lawyers based on area of law and risk level
+    // Find suitable lawyers based on area of law and risk level with full details
     const suggestedLawyers = await ProBono.find({
       areasOfPractice: areaOfLaw,
       isActive: true
-    }).sort('-rating').limit(3);
+    })
+    .populate('lawyer', 'name email')
+    .sort('-rating')
+    .limit(3);
 
     // Generate steps based on the problem
     const steps = generateSteps(areaOfLaw);
@@ -39,19 +42,14 @@ export const createAnalysis = async (req, res) => {
       relevantArticles
     });
 
-    // Populate the lawyers' information
-    await newAnalysis.populate({
-      path: 'suggestedLawyers',
-      select: 'lawyer rating experience areasOfPractice',
-      populate: {
-        path: 'lawyer',
-        select: 'name email'
-      }
-    });
-
     res.status(201).json({
       status: 'success',
-      data: { analysis: newAnalysis }
+      data: { 
+        analysis: {
+          ...newAnalysis.toObject(),
+          suggestedLawyers: suggestedLawyers
+        }
+      }
     });
   } catch (error) {
     res.status(400).json({
@@ -181,7 +179,7 @@ const generateAnalysisMetrics = async (problemDescription, areaOfLaw) => {
             content: `Problem: ${problemDescription}\nArea of Law: ${areaOfLaw}`
           }
         ],
-        max_tokens: 100,
+        max_tokens: 500,
         temperature: 0.9
       },
       {
