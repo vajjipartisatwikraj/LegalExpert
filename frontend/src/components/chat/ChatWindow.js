@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, TextField, Button, Typography, List, ListItem, ListItemText, CircularProgress, IconButton, Menu, MenuItem, Snackbar, Alert } from '@mui/material';
-import { Send as SendIcon, Language as LanguageIcon, Translate as TranslateIcon } from '@mui/icons-material';
+import { Box, Paper, TextField, Button, Typography, List, ListItem, ListItemText, CircularProgress, Snackbar, Alert } from '@mui/material';
+import { Send as SendIcon } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
-import transltr from 'transltr';
 import './chat.css';
 
 const handleTranslation = async (text, targetLang) => {
@@ -53,26 +52,7 @@ const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [translating, setTranslating] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedMessage, setSelectedMessage] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-
-  const languages = [
-    { code: 'es', name: 'Spanish' },
-    { code: 'fr', name: 'French' },
-    { code: 'de', name: 'German' },
-    { code: 'it', name: 'Italian' },
-    { code: 'pt', name: 'Portuguese' },
-    { code: 'ru', name: 'Russian' },
-    { code: 'zh', name: 'Chinese' },
-    { code: 'ja', name: 'Japanese' },
-    { code: 'ko', name: 'Korean' },
-    { code: 'hi', name: 'Hindi' },
-    { code: 'bn', name: 'Bengali' },
-    { code: 'te', name: 'Telugu' },
-    { code: 'pa', name: 'Punjabi' }
-  ];
 
   useEffect(() => {
     if (chatId) {
@@ -188,23 +168,6 @@ const ChatWindow = () => {
                 display:'flex',
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  {message.role === 'assistant' && (
-                    <IconButton
-                      size="small"
-                      onClick={(event) => {
-                        setAnchorEl(event.currentTarget);
-                        setSelectedMessage(message);
-                      }}
-                      sx={{ 
-                        color: 'white',
-                        position: 'absolute',
-                        top: 8,
-                        right: 8
-                      }}
-                    >
-                      <TranslateIcon fontSize="small" />
-                    </IconButton>
-                  )}
                   <ListItemText
                     primary={
                       <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
@@ -284,68 +247,6 @@ const ChatWindow = () => {
           </Button>
         </form>
       </Paper>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-        sx={{
-          '& .MuiPaper-root': {
-            backgroundColor: '#1E1E1E',
-            color: 'white',
-            maxHeight: '300px'
-          }
-        }}
-      >
-        {languages.map((lang) => (
-          <MenuItem
-            key={lang.code}
-            onClick={async () => {
-              setTranslating(true);
-              try {
-                console.log('Starting translation to', lang.name);
-                console.log('Original text:', selectedMessage.content);
-                const translatedText = await handleTranslation(selectedMessage.content, lang.code);
-                if (!translatedText) {
-                  throw new Error('Translation returned empty result');
-                }
-                setMessages(prev => prev.map(msg =>
-                  msg === selectedMessage
-                    ? { ...msg, content: translatedText }
-                    : msg
-                ));
-                
-                setSnackbar({
-                  open: true,
-                  message: `Successfully translated to ${lang.name}`,
-                  severity: 'success'
-                });
-              } catch (error) {
-                console.error('Translation error:', error);
-                setSnackbar({
-                  open: true,
-                  message: `Translation failed: ${error.message}`,
-                  severity: 'error'
-                });
-              } finally {
-                setTranslating(false);
-                setAnchorEl(null);
-              }
-            }}
-            sx={{
-              '&:hover': {
-                backgroundColor: 'rgba(220, 0, 78, 0.08)'
-              }
-            }}
-          >
-            {translating ? (
-              <CircularProgress size={20} />
-            ) : (
-              lang.name
-            )}
-          </MenuItem>
-        ))}
-      </Menu>
 
       <Snackbar
         open={snackbar.open}
