@@ -34,7 +34,7 @@ export const register = async (req, res) => {
     // Remove password from output
     user.password = undefined;
 
-    res.status(201).json({
+    res.status(201).json({  
       status: 'success',
       token,
       data: { user }

@@ -22,9 +22,41 @@ app.use(express.json());
 app.use(limiter);
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/legalexpert')
+const mongooseOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 60000, // Increased from 30000
+  socketTimeoutMS: 90000, // Increased from 45000
+  connectTimeoutMS: 60000, // Increased from 30000
+  retryWrites: true,
+  maxPoolSize: 50,
+  wtimeoutMS: 30000,
+  heartbeatFrequencyMS: 2000
+};
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/legalexpert', mongooseOptions)
   .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+    // Implement retry logic instead of immediate exit
+    setTimeout(() => {
+      console.log('Retrying MongoDB connection...');
+      process.exit(1);
+    }, 5000);
+  });
+
+// Handle MongoDB connection events
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected. Attempting to reconnect...');
+});
+
+mongoose.connection.on('reconnected', () => {
+  console.log('MongoDB reconnected successfully.');
+});
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';

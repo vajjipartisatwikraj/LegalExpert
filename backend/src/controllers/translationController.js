@@ -35,4 +35,4 @@ export const translateText = async (req, res) => {
       error: error.message
     });
   }
-});
+};
