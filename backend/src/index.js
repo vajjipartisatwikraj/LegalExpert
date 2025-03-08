@@ -10,6 +10,9 @@ dotenv.config();
 // Create Express app
 const app = express();
 
+// Enable trust proxy for rate limiter behind reverse proxy
+app.set('trust proxy', 1);
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -17,7 +20,12 @@ const limiter = rateLimit({
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://legalexpert-frontend.onrender.com'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(limiter);
 
@@ -25,13 +33,16 @@ app.use(limiter);
 const mongooseOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 60000, // Increased from 30000
-  socketTimeoutMS: 90000, // Increased from 45000
-  connectTimeoutMS: 60000, // Increased from 30000
+  serverSelectionTimeoutMS: 60000,
+  socketTimeoutMS: 90000,
+  connectTimeoutMS: 60000,
   retryWrites: true,
   maxPoolSize: 50,
   wtimeoutMS: 30000,
-  heartbeatFrequencyMS: 2000
+  heartbeatFrequencyMS: 2000,
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: true // Only for development, remove in production with proper certificates
 };
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/legalexpert', mongooseOptions)
