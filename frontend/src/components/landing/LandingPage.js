@@ -44,7 +44,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: '100vh', bgcolor: theme.palette.background.default }}>
+    <Box sx={{ flexGrow: 1, minHeight: '100vh', bgcolor: '#000000' }}>
       <AppBar position="fixed" sx={{ backgroundColor: '#000000', borderBottom: '1px solid #1E1E1E' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -96,7 +96,7 @@ const LandingPage = () => {
           sx={{
             pt: 8,
             pb: 6,
-            background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+            background: 'linear-gradient(45deg, #000000 30%, #DC004E 90%)',
             color: 'white'
           }}
         >
@@ -137,7 +137,15 @@ const LandingPage = () => {
                     to="/login"
                     variant="outlined"
                     size="large"
-                    sx={{ borderRadius: 2, color: 'white', borderColor: 'white' }}
+                    sx={{ 
+                      borderRadius: 2, 
+                      color: 'white', 
+                      borderColor: '#DC004E',
+                      '&:hover': {
+                        borderColor: '#DC004E',
+                        backgroundColor: 'rgba(220, 0, 78, 0.08)'
+                      } 
+                    }}
                   >
                     Login
                   </Button>
@@ -180,7 +188,8 @@ const LandingPage = () => {
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    bgcolor: theme.palette.background.paper,
+                    bgcolor: '#000000',
+                    border: '1px solid #DC004E',
                     transition: '0.3s',
                     '&:hover': {
                       transform: 'translateY(-5px)',
@@ -189,7 +198,7 @@ const LandingPage = () => {
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                    <Box sx={{ color: theme.palette.primary.main, mb: 2 }}>
+                    <Box sx={{ color: '#DC004E', mb: 2 }}>
                       {feature.icon}
                     </Box>
                     <Typography gutterBottom variant="h5" component="h3">
@@ -208,7 +217,8 @@ const LandingPage = () => {
         {/* Call to Action */}
         <Box
           sx={{
-            bgcolor: theme.palette.primary.main,
+            bgcolor: '#000000',
+            border: '1px solid #DC004E',
             color: 'white',
             py: 8,
             textAlign: 'center'

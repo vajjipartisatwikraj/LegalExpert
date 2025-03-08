@@ -17,12 +17,16 @@ export const createAnalysis = async (req, res) => {
     // Generate AI-powered analysis metrics
     const analysis = await generateAnalysisMetrics(problemDescription, areaOfLaw);
 
-    // Find suitable lawyers based on area of law and risk level with full details
+    // Find suitable lawyers based on area of law
     const suggestedLawyers = await ProBono.find({
       areasOfPractice: areaOfLaw,
       isActive: true
     })
-    .populate('lawyer', 'name email')
+    .populate({
+      path: 'lawyer',
+      select: 'name email lawyerProfile',
+      model: 'User'
+    })
     .sort('-rating')
     .limit(3);
 
@@ -65,10 +69,11 @@ export const getAnalysisById = async (req, res) => {
     const analysis = await Analysis.findById(req.params.id)
       .populate({
         path: 'suggestedLawyers',
-        select: 'lawyer rating experience areasOfPractice',
+        select: 'lawyer rating experience areasOfPractice languages contactInfo description',
         populate: {
           path: 'lawyer',
-          select: 'name email'
+          select: 'name email lawyerProfile',
+          model: 'User'
         }
       });
 
@@ -97,10 +102,11 @@ export const getUserAnalyses = async (req, res) => {
     const analyses = await Analysis.find({ user: req.user._id })
       .populate({
         path: 'suggestedLawyers',
-        select: 'lawyer rating experience areasOfPractice',
+        select: 'lawyer rating experience areasOfPractice languages contactInfo description',
         populate: {
           path: 'lawyer',
-          select: 'name email'
+          select: 'name email lawyerProfile',
+          model: 'User'
         }
       })
       .sort('-createdAt');
@@ -207,6 +213,8 @@ const generateAnalysisMetrics = async (problemDescription, areaOfLaw) => {
       throw new Error('AI response does not contain the required metrics');
     }
 
+
+    
     const metrics = matches.slice(0, 3).map(num => {
       const parsed = parseInt(num);
       if (parsed < 0 || parsed > 100) {
@@ -226,6 +234,13 @@ const generateAnalysisMetrics = async (problemDescription, areaOfLaw) => {
     const riskLevel = calculateFinalRiskLevel(aiRiskLevel, areaOfLaw);
     const resolutionProbability = calculateResolutionProbability(aiResolutionProb, aiComplexity, areaOfLaw);
     const complexity = calculateComplexityScore(aiComplexity, areaOfLaw);
+
+    console.log('Analysis Metrics:', {
+      riskLevel,
+      resolutionProbability,
+      complexity,
+      timeEstimate: generateTimeEstimate(complexity)
+    });
 
     return {
       riskLevel,

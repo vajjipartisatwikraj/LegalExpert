@@ -32,6 +32,7 @@ import chatRoutes from './routes/chat.routes.js';
 import documentRoutes from './routes/document.routes.js';
 import probonoRoutes from './routes/probono.routes.js';
 import analysisRoutes from './routes/analysis.routes.js';
+import translationRoutes from './routes/translationRoutes.js';
 
 // Register routes
 app.use('/api/auth', authRoutes);
@@ -39,6 +40,7 @@ app.use('/api/chats', chatRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/probono', probonoRoutes);
 app.use('/api/analysis', analysisRoutes);
+app.use('/api', translationRoutes);  // Mount translation routes
 
 // Basic route
 app.get('/', (req, res) => {

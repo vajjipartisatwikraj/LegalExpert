@@ -1,15 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, TextField, Button, Typography, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
-import { Send as SendIcon } from '@mui/icons-material';
+import { Box, Paper, TextField, Button, Typography, List, ListItem, ListItemText, CircularProgress, IconButton, Menu, MenuItem, Snackbar, Alert } from '@mui/material';
+import { Send as SendIcon, Language as LanguageIcon, Translate as TranslateIcon } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import transltr from 'transltr';
 import './chat.css';
 
+const handleTranslation = async (text, targetLang) => {
+  try {
+    // Input validation
+    if (!text || !targetLang) {
+      throw new Error('Missing required translation parameters');
+    }
+
+    // Using Google Translate API directly
+    const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`);
+    
+    if (!response.ok) {
+      const errorMessage = `Translation request failed with status: ${response.status}`;
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    
+    const data = await response.json();
+    if (!data || !data[0]) {
+      const errorMessage = 'Invalid translation response format';
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    
+    // Extract and combine all translated segments
+    const translatedText = data[0]
+      .filter(segment => segment && segment[0])
+      .map(segment => segment[0])
+      .join('');
+    
+    if (!translatedText) {
+      const errorMessage = 'Translation returned empty result';
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    
+    console.log(`Successfully translated text to ${targetLang}`);
+    return translatedText;
+  } catch (error) {
+    console.error('Translation error:', error);
+    throw new Error(`Translation failed: ${error.message}`);
+  }
+};
 
 const ChatWindow = () => {
   const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  const languages = [
+    { code: 'es', name: 'Spanish' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'it', name: 'Italian' },
+    { code: 'pt', name: 'Portuguese' },
+    { code: 'ru', name: 'Russian' },
+    { code: 'zh', name: 'Chinese' },
+    { code: 'ja', name: 'Japanese' },
+    { code: 'ko', name: 'Korean' },
+    { code: 'hi', name: 'Hindi' },
+    { code: 'bn', name: 'Bengali' },
+    { code: 'te', name: 'Telugu' },
+    { code: 'pa', name: 'Punjabi' }
+  ];
 
   useEffect(() => {
     if (chatId) {
@@ -123,25 +186,43 @@ const ChatWindow = () => {
                 borderRadius: '12px',
                 position: 'relative',
                 display:'flex',
-                
               }}>
-                <ListItemText
-                  primary={
-                    <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
-                      {message.role === 'user' ? 'You' : 'AI Assistant'}
-                    </Typography>
-                  }
-                  secondary={
-                    <Box>
-                      <Typography variant="body1" sx={{ color: 'white', mb: 2 }}>
-                        {message.content}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  {message.role === 'assistant' && (
+                    <IconButton
+                      size="small"
+                      onClick={(event) => {
+                        setAnchorEl(event.currentTarget);
+                        setSelectedMessage(message);
+                      }}
+                      sx={{ 
+                        color: 'white',
+                        position: 'absolute',
+                        top: 8,
+                        right: 8
+                      }}
+                    >
+                      <TranslateIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
+                        {message.role === 'user' ? 'You' : 'AI Assistant'}
                       </Typography>
-                      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                        {formatTimestamp(message.timestamp)}
-                      </Typography>
-                    </Box>
-                  }
-                />
+                    }
+                    secondary={
+                      <Box>
+                        <Typography variant="body1" sx={{ color: 'white', mb: 2 }}>
+                          {message.content}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                          {formatTimestamp(message.timestamp)}
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                </Box>
               </Paper>
             </ListItem>
           ))}
@@ -203,6 +284,83 @@ const ChatWindow = () => {
           </Button>
         </form>
       </Paper>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+            maxHeight: '300px'
+          }
+        }}
+      >
+        {languages.map((lang) => (
+          <MenuItem
+            key={lang.code}
+            onClick={async () => {
+              setTranslating(true);
+              try {
+                console.log('Starting translation to', lang.name);
+                console.log('Original text:', selectedMessage.content);
+                const translatedText = await handleTranslation(selectedMessage.content, lang.code);
+                if (!translatedText) {
+                  throw new Error('Translation returned empty result');
+                }
+                setMessages(prev => prev.map(msg =>
+                  msg === selectedMessage
+                    ? { ...msg, content: translatedText }
+                    : msg
+                ));
+                
+                setSnackbar({
+                  open: true,
+                  message: `Successfully translated to ${lang.name}`,
+                  severity: 'success'
+                });
+              } catch (error) {
+                console.error('Translation error:', error);
+                setSnackbar({
+                  open: true,
+                  message: `Translation failed: ${error.message}`,
+                  severity: 'error'
+                });
+              } finally {
+                setTranslating(false);
+                setAnchorEl(null);
+              }
+            }}
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(220, 0, 78, 0.08)'
+              }
+            }}
+          >
+            {translating ? (
+              <CircularProgress size={20} />
+            ) : (
+              lang.name
+            )}
+          </MenuItem>
+        ))}
+      </Menu>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

@@ -9,6 +9,7 @@
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
+    "@google-cloud/translate": "^8.5.1",
     "@mistralai/mistralai": "^1.5.0",
     "axios": "^1.8.1",
     "bcryptjs": "^2.4.3",

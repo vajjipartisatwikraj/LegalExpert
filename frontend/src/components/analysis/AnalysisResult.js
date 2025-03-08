@@ -10,24 +10,31 @@ import {
   ListItemText,
   Divider,
   Chip,
-
+  LinearProgress,
+  Paper
 } from '@mui/material';
 
 const AnalysisResult = ({ analysis }) => {
-  const renderRiskMetric = (value, label) => (
+  const renderRiskGauge = (value, label) => (
     <Box sx={{ mb: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: 500, color: '#fff' }}>{label}</Typography>
-        <Typography 
-          variant="h6" 
-          sx={{ 
-            fontWeight: 600, 
-            color: value > 66 ? '#f44336' : value > 33 ? '#ff9800' : '#4caf50'
-          }}
-        >
-          {value}%
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+        <Typography variant="h6" sx={{ fontWeight: 500 }}>{label}</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>{value}%</Typography>
       </Box>
+      <LinearProgress
+        variant="determinate"
+        value={value}
+        sx={{
+          height: 15,
+          borderRadius: 10,
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          '& .MuiLinearProgress-bar': {
+            borderRadius: 10,
+            backgroundColor: value > 66 ? '#f44336' : value > 33 ? '#ff9800' : '#4caf50',
+            transition: 'transform 0.8s ease-in-out'
+          }
+        }}
+      />
     </Box>
   );
 
@@ -46,9 +53,9 @@ const AnalysisResult = ({ analysis }) => {
             <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 600, color: '#fff' }}>
               Risk Analysis
             </Typography>
-            {renderRiskMetric(analysis.riskLevel, 'Risk Level')}
-            {renderRiskMetric(analysis.resolutionProbability, 'Resolution Probability')}
-            {renderRiskMetric(analysis.complexity, 'Case Complexity')}
+            {renderRiskGauge(analysis.riskLevel, 'Risk Level')}
+            {renderRiskGauge(analysis.resolutionProbability, 'Resolution Probability')}
+            {renderRiskGauge(analysis.complexity, 'Case Complexity')}
             
             <Box sx={{ mt: 4, p: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 2 }}>
               <Typography variant="h6" gutterBottom sx={{ color: '#fff' }}>
@@ -86,12 +93,12 @@ const AnalysisResult = ({ analysis }) => {
                     <ListItemText
                       primary={
                         <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>
-                          {lawyer.name}
+                          { (lawyer.lawyer?.name || 'Unknown Lawyer') + ` (${Number(lawyer.rating).toFixed(1)} ★)` }
                         </Typography>
                       }
                       secondary={
                         <Box sx={{ mt: 1 }}>
-                          {lawyer.areasOfPractice.map((area, i) => (
+                          {(lawyer.areasOfPractice || lawyer.lawyer?.areasOfPractice || []).map((area, i) => (
                             <Chip
                               key={i}
                               label={area}

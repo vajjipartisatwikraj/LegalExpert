@@ -12,15 +12,18 @@
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.1",
+    "i18next": "^24.2.2",
     "quill": "^2.0.3",
     "react": "^18.3.1",
     "react-d3-speedometer": "^3.1.1",
     "react-dom": "^18.3.1",
     "react-gauge-chart": "^0.5.1",
+    "react-i18next": "^15.4.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.2.0",
     "react-scripts": "5.0.1",
     "recharts": "^2.15.1",
+    "transltr": "^1.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
