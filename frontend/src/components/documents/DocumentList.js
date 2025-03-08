@@ -37,7 +37,7 @@ const DocumentList = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/documents', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/documents`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -59,7 +59,7 @@ const DocumentList = () => {
 
   const handleEditDocument = async (formData) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/documents/${selectedDocument._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/documents/${selectedDocument._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const DocumentList = () => {
 
   const handleDownloadPDF = async (documentId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/documents/${documentId}/pdf`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/documents/${documentId}/pdf`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }

@@ -82,7 +82,7 @@ const ChatWindow = () => {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/chats', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chats`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -117,7 +117,7 @@ const ChatWindow = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/chats/${chatId}/messages`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chats/${chatId}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
