@@ -41,7 +41,7 @@ const ChatList = () => {
 
   const fetchChats = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chats`, {
+      const response = await fetch(`https://legalexpert-backend.onrender.com/api/chats`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -57,7 +57,7 @@ const ChatList = () => {
 
   const handleCreateChat = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chats`, {
+      const response = await fetch(`https://legalexpert-backend.onrender.com/api/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const ChatList = () => {
 
   const handleDeleteChat = async (chatId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chats/${chatId}`, {
+      const response = await fetch(`https://legalexpert-backend.onrender.com/api/chats/${chatId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
