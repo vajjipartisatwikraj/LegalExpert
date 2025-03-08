@@ -33,6 +33,7 @@ import {
   LocationOn as LocationIcon
 } from '@mui/icons-material';
 import LawyerCard from './LawyerCard';
+import api from '../../services/api';
 
 const ProBonoList = () => {
   const [lawyers, setLawyers] = useState([]);
@@ -59,7 +60,7 @@ const ProBonoList = () => {
 
   const fetchLawyers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/probono', {
+      const response = await api.get('/api/probono', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -81,7 +82,7 @@ const ProBonoList = () => {
 
   const handleRateLawyer = async (lawyerId, rating) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/probono/${lawyerId}/rate`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/probono/${lawyerId}/rate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

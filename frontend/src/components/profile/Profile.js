@@ -17,6 +17,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import axios from 'axios';
+import api from '../../services/api';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -32,7 +33,7 @@ const Profile = () => {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/users/profile', {
+      const response = await api.get('/api/users/profile', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -61,7 +62,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch('http://localhost:5000/api/users/profile', formData, {
+      const response = await axios.patch(`${process.env.REACT_APP_API_URL}/api/users/profile`, formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }

@@ -93,13 +93,18 @@ const Register = () => {
         };
       }
 
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestData)
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
 
@@ -111,7 +116,7 @@ const Register = () => {
         setError(data.message || 'Registration failed. Please try again.');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError(err.message || 'An error occurred during registration. Please try again.');
       console.error('Registration error:', err);
     }
   };

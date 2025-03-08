@@ -18,6 +18,7 @@ import {
   Group as GroupIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 const Home = () => {
   const [recentDocs, setRecentDocs] = useState([]);
@@ -33,12 +34,12 @@ const Home = () => {
   const fetchRecentActivities = async () => {
     try {
       const [docsResponse, chatsResponse] = await Promise.all([
-        fetch('http://localhost:5000/api/documents', {
+        api.get('/api/documents', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         }),
-        fetch('http://localhost:5000/api/chats', {
+        api.get('/api/chats', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

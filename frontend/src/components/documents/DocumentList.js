@@ -20,6 +20,7 @@ import {
 import DocumentDialog from './DocumentDialog';
 import DocumentEditDialog from './DocumentEditDialog';
 import './documents.css'
+import api from '../../services/api';
 const DocumentList = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,8 +86,7 @@ const DocumentList = () => {
 
   const handleCreateDocument = async (formData) => {
     try {
-      const response = await fetch('http://localhost:5000/api/documents', {
-        method: 'POST',
+      const response = await api.post('/api/documents', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

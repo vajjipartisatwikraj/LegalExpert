@@ -18,6 +18,8 @@ import {
 import axios from 'axios';
 import './analysis.css';
 
+import api from '../../services/api';
+
 const areasOfLaw = [
   'Criminal',
   'Civil',
@@ -44,15 +46,11 @@ const CaseAnalysis = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:5000/api/analysis',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+      const response = await api.post('/api/analysis', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
+      });
       
       console.log('Suggested Lawyers:', response.data.data.analysis.suggestedLawyers[0].name);
       setAnalysis(response.data.data.analysis);
