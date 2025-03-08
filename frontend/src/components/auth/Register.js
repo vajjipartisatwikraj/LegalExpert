@@ -93,7 +93,7 @@ const Register = () => {
         };
       }
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
+      const response = await fetch(`https://legalexpert-backend.onrender.com/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
