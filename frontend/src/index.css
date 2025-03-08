@@ -1,34 +1,34 @@
 @font-face {
   font-family: 'Nekst-Regular';
-  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Regular.ttf') format('truetype');
+  src: url('../public/fonts/Nekst-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Nekst-Light';
-  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Light.ttf') format('truetype');
+  src: url('../public/fonts/Nekst-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Nekst-Medium';
-  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Medium.ttf') format('truetype');
+  src: url('../public/fonts/Nekst-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Nekst-SemiBold';
-  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-SemiBold.ttf') format('truetype');
+  src: url('../public/fonts/Nekst-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Nekst-Bold';
-  src: url('C:\Users\SATWIK\OneDrive\Desktop\LegalExpert.Ai\frontend\public\fonts\Nekst-Bold.ttf') format('truetype');
+  src: url('../public/fonts/Nekst-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
