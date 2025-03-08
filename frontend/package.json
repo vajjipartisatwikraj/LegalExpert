@@ -23,7 +23,6 @@
     "react-router-dom": "^7.2.0",
     "react-scripts": "^5.0.1",
     "recharts": "^2.15.1",
-    "transltr": "^1.0.1",
     "tsutils": "^3.21.0",
     "typescript": "4.9.5",
     "web-vitals": "^2.1.4"
