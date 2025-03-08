@@ -46,12 +46,9 @@ const Home = () => {
         })
       ]);
 
-      const docsData = await docsResponse.json();
-      const chatsData = await chatsResponse.json();
-
-      if (docsData.status === 'success' && chatsData.status === 'success') {
-        setRecentDocs(docsData.data.documents.slice(0, 3));
-        setRecentChats(chatsData.data.chats.slice(0, 3));
+      if (docsResponse.data.status === 'success' && chatsResponse.data.status === 'success') {
+        setRecentDocs(docsResponse.data.data.documents.slice(0, 3));
+        setRecentChats(chatsResponse.data.data.chats.slice(0, 3));
       } else {
         setError('Failed to fetch recent activities');
       }

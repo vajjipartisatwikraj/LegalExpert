@@ -15,9 +15,7 @@ import {
   MenuItem,
   Divider
 } from '@mui/material';
-import axios from 'axios';
 import './analysis.css';
-
 import api from '../../services/api';
 
 const areasOfLaw = [
@@ -45,17 +43,15 @@ const CaseAnalysis = () => {
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await api.post('/api/analysis', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await api.post('/api/analysis', formData);
       
-      console.log('Suggested Lawyers:', response.data.data.analysis.suggestedLawyers[0].name);
+      if (response.data?.data?.analysis?.suggestedLawyers?.length > 0) {
+        console.log('Suggested Lawyers:', response.data.data.analysis.suggestedLawyers[0].name);
+      }
       setAnalysis(response.data.data.analysis);
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred');
+      console.error('Analysis error:', err);
+      setError(err.response?.data?.message || 'An error occurred while analyzing your case. Please try again.');
     } finally {
       setLoading(false);
     }

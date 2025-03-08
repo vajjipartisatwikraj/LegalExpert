@@ -65,12 +65,11 @@ const ProBonoList = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      const data = await response.json();
       
-      if (data.status === 'success') {
-        setLawyers(data.data.probonoLawyers);
+      if (response.data.status === 'success') {
+        setLawyers(response.data.data.probonoLawyers);
       } else {
-        setError(data.message || 'Failed to fetch lawyers');
+        setError(response.data.message || 'Failed to fetch lawyers');
       }
     } catch (error) {
       setError('Error connecting to server');

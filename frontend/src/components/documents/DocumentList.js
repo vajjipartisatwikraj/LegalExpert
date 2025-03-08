@@ -86,24 +86,31 @@ const DocumentList = () => {
 
   const handleCreateDocument = async (formData) => {
     try {
-      const response = await api.post('/api/documents', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(formData)
-      });
+      // Validate required fields
+      if (!formData.title || !formData.type || !formData.description || !formData.legalDomain) {
+        throw new Error('Please fill in all required fields');
+      }
 
-      const data = await response.json();
-      if (data.status === 'success') {
-        setDocuments(prev => [data.data.document, ...prev]);
+      // Format the request body
+      const documentData = {
+        title: formData.title.trim(),
+        type: formData.type,
+        description: formData.description.trim(),
+        legalDomain: formData.legalDomain
+      };
+
+      const response = await api.post('/api/documents', documentData);
+
+      if (response.data.status === 'success') {
+        setDocuments(prev => [response.data.data.document, ...prev]);
         return true;
       } else {
-        throw new Error(data.message || 'Failed to create document');
+        throw new Error(response.data.message || 'Failed to create document');
       }
     } catch (error) {
       console.error('Error creating document:', error);
-      throw error;
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create document';
+      throw new Error(errorMessage);
     }
   };
 
